@@ -1,37 +1,43 @@
-#include<ESP32Servo.h>
+#include <ESP32Servo.h>
+
 #define buzzerPin 23
-Servo servomotor;
- void setup() {
+#define servoPin 21
+
+Servo servoMotor;
+
+void setup() {
   pinMode(buzzerPin, OUTPUT); 
   pinMode(LED_BUILTIN, OUTPUT);
-  servomotor.attach(21);
+  stopBuzzer();
+  servoMotor.attach(servoPin);
   Serial.begin(9600);
- }
+}
 
- void loop() {
-  bool f=0;
+void loop() {
   if (Serial.available()) {
     char incomingByte = Serial.read();
+    Serial.println(incomingByte); // Print the incoming byte to the serial monitor
     if (incomingByte == '1') {
-        if(!f)
-        {
-          servomotor.write(90);
-          f=1;
-        }
-        digitalWrite(LED_BUILTIN, HIGH);
-        soundBuzzer();
-        delay(100);
-        stopBuzzer();
-        digitalWrite(LED_BUILTIN, LOW);
-        delay(100);
-      
+      digitalWrite(LED_BUILTIN, HIGH);
+      servoMotor.write(180);
+      soundBuzzer();
+      delay(200); // Delay for 200 milliseconds
+      stopBuzzer();
+      digitalWrite(LED_BUILTIN, LOW);
+      servoMotor.write(0);
+      delay(200); // Delay for 200 milliseconds
+    } else {
+      digitalWrite(LED_BUILTIN, LOW);
+      stopBuzzer();
+      servoMotor.write(0); // Stop servo motor immediately
     }
-    else digitalWrite(LED_BUILTIN, LOW),stopBuzzer(),f=0;
   }
- }
- void soundBuzzer() {
-  digitalWrite(buzzerPin, HIGH); 
 }
+
+void soundBuzzer() {
+  digitalWrite(buzzerPin, LOW); // Power the buzzer
+}
+
 void stopBuzzer() {
-  digitalWrite(buzzerPin, LOW); 
+  digitalWrite(buzzerPin, HIGH); // Turn off power to the buzzer
 }
