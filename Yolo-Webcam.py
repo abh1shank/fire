@@ -32,9 +32,13 @@ while True:
             cvzone.putTextRect(img, f'{classNames[cls]} {conf}', (max(0, x1), max(35, y1)), scale=1, thickness=1)
 
             if classNames[cls] == 'fire':
-                esp32.write(b'1')
-            else : esp32.write(b'0')
-
+                esp32.write(b'f')
+            elif classNames[cls] == 'spark' :
+                esp32.write(b'p')
+            elif classNames[cls] == 'smoke' :
+                esp32.write(b's')
+            else:
+                esp32.write(b'n')
     fps = 1 / (new_frame_time - prev_frame_time)
     prev_frame_time = new_frame_time
     print(fps)
