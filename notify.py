@@ -1,11 +1,8 @@
 from email.message import EmailMessage
 import ssl
 import smtplib
-
+from config import sender_email,password,receiver_email
 def send_alert(detection):
-    sender_email = 'abhishanks.ic.21@nitj.ac.in'
-    password = 'tnql boxq zlcv phge'
-    receiver_email = 'saranabhishank13@gmail.com'
     subject = 'ALERT !!!'
     body = f'A {detection} HAS BEEN DETECTED !!'
 
