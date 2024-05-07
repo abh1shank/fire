@@ -3,6 +3,7 @@ import cv2
 import cvzone
 import math
 import time
+import notify
 
 model = YOLO(r"C:\Users\saran\Downloads\fire_spark_smoke.pt")
 
@@ -30,14 +31,21 @@ while True:
 
             cvzone.cornerRect(img, (x1, y1, w, h))
             cvzone.putTextRect(img, f'{classNames[cls]} {conf}', (max(0, x1), max(35, y1)), scale=1, thickness=1)
-
+            f=0
             if classNames[cls] == 'fire':
+                if not f : notify.send_alert(classNames[cls])
+                f=1
                 esp32.write(b'f')
             elif classNames[cls] == 'spark' :
+                if not f : notify.send_alert(classNames[cls])
+                f=1
                 esp32.write(b'p')
             elif classNames[cls] == 'smoke' :
+                if not f : notify.send_alert(classNames[cls])
+                f=1
                 esp32.write(b's')
             else:
+                f=0
                 esp32.write(b'n')
     fps = 1 / (new_frame_time - prev_frame_time)
     prev_frame_time = new_frame_time
